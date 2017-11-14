@@ -1,7 +1,7 @@
 import copy
 import logging
 
-from base import TEST_HTTP_RESPONSE, close_socket
+from .utils import TEST_HTTP_RESPONSE, close_socket
 
 
 class RequestHandler:

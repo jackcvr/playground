@@ -1,6 +1,5 @@
 import socket
 
-
 TEST_HTTP_RESPONSE = b'HTTP/1.1 200 OK\n\ntest\n'
 
 
@@ -17,19 +16,3 @@ def close_socket(sock):
     except OSError:
         pass
     sock.close()
-
-
-def main(address, **kwargs):
-    server = create_server(**kwargs)
-    server.bind(address)
-    server.listen()
-
-    while True:
-        conn, _ = server.accept()
-        conn.recv(1024)
-        conn.sendall(TEST_HTTP_RESPONSE)
-        close_socket(conn)
-
-
-if __name__ == '__main__':
-    main(('0.0.0.0', 8000))

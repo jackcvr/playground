@@ -1,10 +1,8 @@
 import selectors
 import socket
-from concurrent.futures import ProcessPoolExecutor
 from functools import partial
 
-from base import create_server
-from handlers import HTTPRequestHandler, RequestHandler
+from .utils import create_server
 
 
 class TCPServer:
@@ -13,6 +11,8 @@ class TCPServer:
     reuse_address = True
 
     def __init__(self, address, handler=None, selector=None):
+        from .handlers import RequestHandler
+
         self._socket = create_server(
             address_family=self.address_family,
             socket_type=self.socket_type,
@@ -59,16 +59,3 @@ class TCPServer:
     def _run_handler(self, handler, sock, addr):
         self._selector.unregister(sock)
         handler(sock, addr)
-
-
-def main(address, processes=None):
-    server = TCPServer(
-        address,
-        handler=HTTPRequestHandler(executor=ProcessPoolExecutor(processes)),
-    )
-    with server:
-        server.start()
-
-
-if __name__ == '__main__':
-    main(('0.0.0.0', 8000))
